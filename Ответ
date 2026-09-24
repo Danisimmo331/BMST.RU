@@ -1,0 +1,98 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <limits>
+
+using namespace std;
+
+// "Address" structure
+struct Address {
+    string street;   // street name
+    int house;       // house number
+    int apartment;   // apartment number
+};
+
+// "Resident" structure
+struct Resident {
+    string name;     // Full name
+    Address address; // address (variable of a struct type)
+    string gender;   // gender
+    int age;         // age
+};
+
+// Function to clear the input buffer (so getline works correctly after cin)
+void clearInputBuffer() {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of residents (n): ";
+    while (!(cin >> n) || n <= 0) {
+        cout << "Input error! Please enter a positive number: ";
+        cin.clear();
+        clearInputBuffer();
+    }
+    clearInputBuffer(); // Clear buffer after reading n
+
+    // Array of struct type variables
+    vector<Resident> database(n);
+
+    // Input initial data
+    cout << "\n=== DATA INPUT ===\n";
+    for (int i = 0; i < n; ++i) {
+        cout << "\nResident #" << i + 1 << ":\n";
+
+        cout << "Full Name: ";
+        getline(cin, database[i].name);
+
+        cout << "Street: ";
+        getline(cin, database[i].address.street);
+
+        cout << "House number: ";
+        cin >> database[i].address.house;
+
+        cout << "Apartment number: ";
+        cin >> database[i].address.apartment;
+        clearInputBuffer(); // Clear buffer after reading numbers before reading a string
+
+        cout << "Gender (M/F): ";
+        getline(cin, database[i].gender);
+
+        cout << "Age: ";
+        cin >> database[i].age;
+        clearInputBuffer(); // Clear buffer for the next iteration
+    }
+
+    // Output the entered data for verification
+    cout << "\n=== HOUSING OFFICE DATABASE (INPUT VERIFICATION) ===\n";
+    for (int i = 0; i < n; ++i) {
+        cout << i + 1 << ". " << database[i].name
+             << " | Gender: " << database[i].gender
+             << " | Age: " << database[i].age
+             << " | Address: " << database[i].address.street << " st."
+             << ", house " << database[i].address.house
+             << ", apt. " << database[i].address.apartment << "\n";
+    }
+
+    // Solving Task 16:
+    // Determine how many children under 7 years old live on the same street.
+    cout << "\n=== TASK 16 ===\n";
+    string target_street;
+    cout << "Enter the street name to search: ";
+    getline(cin, target_street);
+
+    int children_count = 0;
+
+    // Iterate through the vector and find matches
+    for (const auto& resident : database) {
+        if (resident.age < 7 && resident.address.street == target_street) {
+            children_count++;
+        }
+    }
+
+    cout << "Number of children under 7 years old living on '"
+         << target_street << "' street: " << children_count << "\n";
+
+    return 0;
+}
