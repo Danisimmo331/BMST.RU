@@ -1,0 +1,65 @@
+```
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+// Функция для вычисления квадратного корня итерационным методом
+void calculateSqrt(double x, double epsilon) {
+    double y_prev = x; // Начальное приближение y_0 = x
+    double y_curr;
+    int iterations = 0;
+
+    // Итерационный процесс
+    while (true) {
+        // Формула: y_i = 1/2 * (y_{i-1} + x / y_{i-1})
+        y_curr = 0.5 * (y_prev + x / y_prev);
+        iterations++;
+
+        // Проверка условия достижения заданной погрешности
+        if (abs(y_curr - y_prev) <= epsilon) {
+            break;
+        }
+
+        y_prev = y_curr;
+    }
+
+    // Результат встроенной функции для сравнения
+    double built_in_result = sqrt(x);
+
+    // Вывод результатов
+    cout << "pogreshnost (xi)  : " << epsilon << endl;
+    cout << "Kolichestvo itteraci   : " << iterations << endl;
+    cout << "Vichislennoe y     : " << fixed << setprecision(8) << y_curr << endl;
+    cout << "Vstroenna sqrt(x): " << fixed << setprecision(8) << built_in_result << endl;
+    cout << "Raznitsa (False)  : " << scientific << abs(y_curr - built_in_result) << defaultfloat << endl;
+    cout << "--------------------------------------------------" << endl;
+}
+
+int main() {
+    setlocale(LC_ALL, "Russian"); // Для корректного отображения кириллицы в консоли
+
+    double x;
+
+    cout << "Vvedi znachenie x (x > 1): ";
+    cin >> x;
+
+    if (x <= 1) {
+        cout << "False: x dolzen bolshe  1." << endl;
+        return 1;
+    }
+
+    cout << "\n--- Otvet x = " << x << " ---\n" << endl;
+
+    // Массив заданных погрешностей
+    double epsilons[] = {1e-2, 1e-4, 1e-6};
+
+    // Прогоняем функцию для каждой погрешности
+    for (int i = 0; i < 3; i++) {
+        calculateSqrt(x, epsilons[i]);
+    }
+
+    return 0;
+}
+```
